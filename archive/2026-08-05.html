@@ -1,0 +1,418 @@
+<title>AI 情報日報 — 第 1 期</title>
+<style>
+  :root {
+    --paper: #F2F1EC;
+    --paper-raised: #FBFAF7;
+    --ink: #1A1D23;
+    --ink-soft: #4B4F57;
+    --muted: #767A80;
+    --line: #DBD8CE;
+    --accent: #1E7F79;
+    --accent-ink: #0E4B47;
+    --accent-tint: #DCEEEC;
+    --critical: #B23A22;
+    --high: #A8762A;
+    --shadow: 0 1px 2px rgba(26,29,35,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #14171C; --paper-raised: #1B1F26; --ink: #E9E7DF; --ink-soft: #C2C0B8;
+      --muted: #8B8F96; --line: #2B2F37; --accent: #4FBDB5; --accent-ink: #BEEFEA;
+      --accent-tint: #1B3634; --critical: #E2725A; --high: #D9A94E; --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14171C; --paper-raised: #1B1F26; --ink: #E9E7DF; --ink-soft: #C2C0B8;
+    --muted: #8B8F96; --line: #2B2F37; --accent: #4FBDB5; --accent-ink: #BEEFEA;
+    --accent-tint: #1B3634; --critical: #E2725A; --high: #D9A94E; --shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  :root[data-theme="light"] {
+    --paper: #F2F1EC; --paper-raised: #FBFAF7; --ink: #1A1D23; --ink-soft: #4B4F57;
+    --muted: #767A80; --line: #DBD8CE; --accent: #1E7F79; --accent-ink: #0E4B47;
+    --accent-tint: #DCEEEC; --critical: #B23A22; --high: #A8762A; --shadow: 0 1px 2px rgba(26,29,35,0.04);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 780px; margin: 0 auto; padding: 48px 24px 80px; }
+  .masthead {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+    border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 28px; flex-wrap: wrap;
+  }
+  .masthead-title {
+    font-family: Georgia, "Iowan Old Style", "Noto Serif TC", serif;
+    font-size: 28px; font-weight: 700; letter-spacing: 0.01em; margin: 0; text-wrap: balance;
+  }
+  .masthead-meta { font-size: 13px; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+
+  .thesis {
+    font-family: Georgia, "Iowan Old Style", "Noto Serif TC", serif;
+    font-size: 19px; line-height: 1.65; color: var(--ink); margin: 0 0 32px;
+    padding: 0 0 0 18px; border-left: 3px solid var(--accent); text-wrap: balance;
+  }
+
+  .stat-row {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px;
+    background: var(--line); border: 1px solid var(--line); margin-bottom: 40px;
+  }
+  .stat-tile { background: var(--paper-raised); padding: 14px 10px; text-align: left; }
+  .stat-num {
+    font-family: Georgia, serif; font-size: 24px; font-variant-numeric: tabular-nums;
+    color: var(--accent-ink); display: block; line-height: 1; margin-bottom: 6px;
+  }
+  .stat-label { font-size: 11.5px; color: var(--muted); }
+
+  section.block { margin-bottom: 40px; }
+  .block-head {
+    display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--line);
+  }
+  .block-head h2 { font-family: Georgia, "Iowan Old Style", "Noto Serif TC", serif; font-size: 20px; margin: 0; }
+  .block-head .count { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .item:last-child { border-bottom: none; }
+  .item-tag {
+    flex: 0 0 auto; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--accent-ink); background: var(--accent-tint); padding: 2px 7px; border-radius: 3px;
+    height: fit-content; white-space: nowrap; margin-top: 3px;
+  }
+  .item-tag.crit { color: #fff; background: var(--critical); }
+  .item-tag.high { color: #fff; background: var(--high); }
+  .item-body h3 { margin: 0 0 4px; font-size: 15.5px; font-weight: 600; }
+  .item-meta {
+    display: flex; gap: 10px; align-items: center; margin-bottom: 4px;
+    font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums;
+  }
+  .item-date::before { content: "📅 "; }
+  .item-metric { color: var(--accent-ink); font-weight: 600; }
+  .item-metric::before { content: "📊 "; }
+  .item-body p { margin: 0; color: var(--ink-soft); font-size: 14.5px; }
+  .item-body a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--accent); }
+  .item-body a:hover { opacity: 0.75; }
+
+  .recap-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+  .recap-item:last-child { border-bottom: none; }
+  .recap-date { flex: 0 0 auto; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .recap-text { color: var(--ink-soft); }
+  .recap-more summary {
+    cursor: pointer; padding: 10px 0; color: var(--accent-ink); font-size: 13px; font-weight: 600;
+    list-style: none;
+  }
+  .recap-more summary::-webkit-details-marker { display: none; }
+  .recap-more summary::before { content: "▸ "; }
+  .recap-more[open] summary::before { content: "▾ "; }
+  .recap-empty { margin: 0; padding: 8px 0 4px; color: var(--muted); font-size: 13px; font-style: italic; }
+
+  .digest-list { list-style: none; margin: 0; padding: 0; }
+  .digest-list li {
+    position: relative; padding: 10px 0 10px 20px; border-bottom: 1px solid var(--line);
+    color: var(--ink-soft); font-size: 14.5px;
+  }
+  .digest-list li:last-child { border-bottom: none; }
+  .digest-list li::before { content: "—"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); }
+  footer p { margin: 0 0 8px; }
+  footer .sources { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+  footer a { color: var(--muted); }
+
+  @media (max-width: 560px) {
+    .stat-row { grid-template-columns: repeat(3, 1fr); }
+    .masthead { flex-direction: column; }
+    .masthead-meta { text-align: left; }
+  }
+</style>
+
+<div class="page">
+
+  <div class="masthead">
+    <h1 class="masthead-title">AI 情報日報</h1>
+    <div class="masthead-meta">第 1 期（修訂版）· 2026年8月5日<br>整理｜ITF00</div>
+  </div>
+
+  <p class="thesis">
+    今天三個訊號值得注意：資本與企業客戶持續往 Anthropic 集中，同時中國陣營（Alibaba Qwen3.8-Max、Moonshot Kimi K3、DeepSeek-V4-Flash）
+    在效能與定價上的攻勢已經逼近甚至超車部分歐美旗艦模型；開源熱度從「做更強的模型」轉向「做更好的 Agent 週邊」（OpenClaw、MCP、AI Gateway），
+    主流 Agent 框架也已全面支援 MCP；學術界則持續在補強 Agentic RAG 與多模態模型的可靠性。三者合起來：AI 正從「能不能用」進入「能不能穩定交付、且選擇變多」的階段。
+  </p>
+
+  <div class="stat-row">
+    <div class="stat-tile"><span class="stat-num">6</span><span class="stat-label">公司動態</span></div>
+    <div class="stat-tile"><span class="stat-num">3</span><span class="stat-label">開源熱門</span></div>
+    <div class="stat-tile"><span class="stat-num">2</span><span class="stat-label">模型/HF</span></div>
+    <div class="stat-tile"><span class="stat-num">8</span><span class="stat-label">研究論文</span></div>
+    <div class="stat-tile"><span class="stat-num">4</span><span class="stat-label">開發工具</span></div>
+  </div>
+
+  <section class="block">
+    <div class="block-head"><h2>公司動態</h2><span class="count">6 則</span></div>
+
+    <div class="item">
+      <span class="item-tag high">資金/營運</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/08 初</span><span class="item-metric">年化營收 300 億美元+</span></div>
+        <h3>Anthropic 營運規模翻三倍以上，企業大客戶數量翻倍</h3>
+        <p>2026 年度化營收突破 300 億美元（2025 年底約 90 億美元），年花費超過 100 萬美元的企業客戶已破千家（2 月時為 500+ 家）。同時宣布與 Google、Broadcom 擴大合作，取得數個 GW 等級的次世代運算資源。<a href="https://www.anthropic.com/news/google-broadcom-partnership-compute" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag crit">新模型</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/08/02</span><span class="item-metric">關鍵基準超越 Kimi K3</span></div>
+        <h3>Alibaba 發布 Qwen3.8-Max，主打長時任務與自主編碼</h3>
+        <p>阿里最新旗艦模型 Qwen3.8-Max 在多項基準測試超越 Moonshot 的 Kimi K3，主打自主編碼、複雜研究等「長時間跨度」任務。<a href="https://fortune.com/2026/08/03/alibaba-qwen3-8-max-china-next-top-ai-model/" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag high">現象級</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/07/16</span><span class="item-metric">48 小時內暫停新訂閱</span></div>
+        <h3>Moonshot Kimi K3 爆紅，熱度堪比當年 DeepSeek R1</h3>
+        <p>7/16 上線後迅速引爆全球關注，Moonshot 因硬體負載過大，48 小時內就暫停新用戶訂閱，是繼 DeepSeek R1 後中國模型最大規模的一次出圈。<a href="https://fortune.com/2026/07/26/china-moonshot-deepseek-zai-kimi-challenging-us-ai-cost/" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">價格戰</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/07/31</span><span class="item-metric">$0.14 / $0.28 每百萬 token</span></div>
+        <h3>DeepSeek 重新後訓練 V4-Flash，價格維持業界最低區間</h3>
+        <p>發布 DeepSeek-V4-Flash-0731，架構不變（284B 總參數／13B 活躍參數 MoE、100 萬 token 上下文、MIT 授權），但推理成本持續壓在同級最低。<a href="https://fortune.com/2026/07/26/china-moonshot-deepseek-zai-kimi-challenging-us-ai-cost/" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">組織</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/08/04</span></div>
+        <h3>Anthropic 新設「全球事務長」職位</h3>
+        <p>Mariano-Florentino (Tino) Cuéllar 加入 Anthropic 擔任 Chief Global Affairs Officer，反映各大 AI 公司持續強化與各國政府的對接能量。<a href="https://www.anthropic.com/news" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">政策</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/08/03</span></div>
+        <h3>OpenAI、Anthropic、Google 同赴白宮 AI 安全會議</h3>
+        <p>三家公司共同參與白宮召開的 AI 安全會議，反映監理對話仍在加溫，企業導入 AI 時的合規/治理成本預期不會下降。<a href="https://www.ibj.com/articles/openai-anthropic-google-to-join-white-house-ai-safety-meeting" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>開源熱門專案</h2><span class="count">GitHub</span></div>
+
+    <div class="item">
+      <span class="item-tag crit">現象級</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">爆紅始於 2026/01 底</span><span class="item-metric">★ 210,000+</span></div>
+        <h3>OpenClaw：2026 年成長最快的開源專案</h3>
+        <p>由 PSPDFKit 創辦人 Peter Steinberger 開發，1 月底爆紅後從 9,000 星在幾天內衝上 6 萬星，目前已超過 21 萬星，被視為 GitHub 史上成長最快的專案之一。<a href="https://blog.bytebytego.com/p/top-ai-github-repositories-in-2026" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">趨勢</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/07 觀察</span></div>
+        <h3>開源熱點從「模型本身」轉向「Agent 週邊生態」</h3>
+        <p>近期 Trending 榜單的共同特徵：Agent 框架、MCP Server、AI Gateway、開發者工具的成長速度已超過通用模型專案本身，記憶體管理、程式碼索引、語音引擎、安全測試等「周邊零件」成為新戰場。<a href="https://www.ai.joaoqueiros.com/blog/github-trending-weekly-daily-ai-builder-repositories-july-2026" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">工具</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/07 上榜</span></div>
+        <h3>Understand-Anything：把程式碼庫變成可互動知識圖譜</h3>
+        <p>能將任意程式碼庫或知識庫轉成可探索、可搜尋、可問答的互動知識圖譜——與我們規劃中的「知識圖譜」概念方向一致，值得評估是否可借用其做法。<a href="https://pasqualepillitteri.it/en/news/3327/github-trending-top-10-may-2026" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>模型與 HuggingFace 動態</h2><span class="count">2 則</span></div>
+
+    <div class="item">
+      <span class="item-tag">本週熱門</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/08 第一週</span></div>
+        <h3>AskChem、Qwen-UI-Agent 登上熱門榜首</h3>
+        <p>HuggingFace 熱度第一為「AskChem」（化學文獻整合分析基礎設施），Qwen-UI-Agent 技術報告同樣受到高度關注，顯示垂直領域 Agent 與 UI 操作型 Agent 是近期焦點。<a href="https://orangebot.ai/top-ai-models-this-week" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag high">生態變化</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/06 數據</span><span class="item-metric">前十占五席</span></div>
+        <h3>中國開源模型下載榜聲量創新高</h3>
+        <p>下載榜由 DeepSeek V4.1、Qwen 3.7、GLM-6、Llama 4.5、Gemma 4 主導，中國開源權重模型首次同時占據前十名中的五席，為歷來最高集中度。<a href="https://presenc.ai/research/huggingface-trending-models-june-2026" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>研究論文（arXiv）</h2><span class="count">Agentic RAG + 多模態</span></div>
+
+    <div class="item">
+      <span class="item-tag">綜述</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/03</span></div>
+        <h3>SoK: Agentic RAG 的分類法與架構總覽</h3>
+        <p>系統性梳理 Agentic RAG 的分類、架構、評估方式與研究方向，適合作為團隊快速建立共同語彙的入門讀物。<a href="https://arxiv.org/pdf/2603.07379" target="_blank" rel="noopener">論文連結</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">可靠性</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/07/01</span></div>
+        <h3>Bayesian Uncertainty Propagation for Agentic RAG Pipelines</h3>
+        <p>英國 Hull 大學團隊提出的概念驗證研究，探討如何在 Agentic RAG 管線中用貝氏網路傳遞與量化不確定性，是提升「AI 敢不敢承認自己不知道」的關鍵研究方向。<a href="https://arxiv.org/abs/2607.00972" target="_blank" rel="noopener">論文連結</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">應用</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/05</span></div>
+        <h3>Agentic GraphRAG：處理非結構化財務資料</h3>
+        <p>展示 GraphRAG 結合多 Agent 協作處理財務類非結構化資料，並嘗試降低財務領域 RAG 的幻覺風險。<a href="https://arxiv.org/pdf/2605.18770" target="_blank" rel="noopener">論文連結</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">效率</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/02/05</span></div>
+        <h3>CompactRAG：降低多跳問答的 LLM 呼叫次數</h3>
+        <p>將語料離線整理成「原子問答知識庫」，推論時無論跳幾次，LLM 只需被呼叫兩次（拆解問題+合成答案），大幅降低多跳問答的部署成本。<a href="https://arxiv.org/abs/2602.05728" target="_blank" rel="noopener">論文連結</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">工程實務</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/07/05</span></div>
+        <h3>Mnemosyne：驗證與修復 AI 產生的工作流程</h3>
+        <p>提出「Agentic 交易處理」概念：AI 生成的每個動作都視為未經信任的提案，要先通過明確的規則檢核才能真正執行，避免看似合理卻其實過時或有害的操作被直接放行。<a href="https://arxiv.org/abs/2607.00269" target="_blank" rel="noopener">論文連結</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">多模態</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/01</span></div>
+        <h3>Vision-DeepResearch：讓多模態模型具備「深度研究」能力</h3>
+        <p>探討如何激發多模態大模型在圖像／文件理解任務中進行多步驟、自主式的深度研究，而非單次問答。<a href="https://arxiv.org/abs/2601.22060" target="_blank" rel="noopener">論文連結</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">基準測試</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/03/14</span></div>
+        <h3>UVLM：可重現的視覺語言模型通用評測載入器</h3>
+        <p>提出統一的載入介面，讓不同視覺語言模型能在同一套基準下被公平比較，解決目前 VLM 評測「各家用各家方法」難以比較的問題。<a href="https://arxiv.org/abs/2603.13893" target="_blank" rel="noopener">論文連結</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">醫療應用</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/02</span></div>
+        <h3>MedMO：醫療影像的多模態理解與定位</h3>
+        <p>針對醫療影像場景設計的多模態模型，強化對病灶等關鍵區域的定位與理解能力，代表垂直領域多模態應用持續深化。<a href="https://arxiv.org/abs/2602.06965" target="_blank" rel="noopener">論文連結</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>開發工具與社群動態</h2><span class="count">4 則</span></div>
+
+    <div class="item">
+      <span class="item-tag">框架</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/06/22</span></div>
+        <h3>LlamaIndex Workflows 正式發布 1.0</h3>
+        <p>定位為「RAG 導向 Agent」的最佳選擇，並提供 MCP 工具整合套件，方便串接外部工具與資料源。<a href="https://www.langchain.com/resources/ai-agent-frameworks" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">框架</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/03</span><span class="item-metric">執行速度提升 40%</span></div>
+        <h3>LangChain 0.3.0「生產就緒」版本上線</h3>
+        <p>新版 LCEL v2 透過優化的圖編譯機制，執行速度提升約 40%，被視為 LangChain 從「原型工具」邁向「生產級框架」的分水嶺。<a href="https://cordum.io/blog/ai-agent-frameworks-comparison" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag">框架</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026/05-06</span></div>
+        <h3>CrewAI 1.14 新增可插拔後端與 Chat API</h3>
+        <p>持續強化多 Agent 協作框架的擴充性，目前主流 Agent 框架（LangChain、LlamaIndex、AutoGen、CrewAI）已全面支援 MCP，形成跨框架共用的「工具層」。<a href="https://chatforest.com/guides/mcp-ai-frameworks-langchain-langgraph-crewai/" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+
+    <div class="item">
+      <span class="item-tag high">突破</span>
+      <div class="item-body">
+        <div class="item-meta"><span class="item-date">2026 年内，Hacker News 熱議</span></div>
+        <h3>OpenAI 推理模型自主解出 78 年懸而未解的數學問題</h3>
+        <p>其中一個推理模型解出了 Erdős 於 1946 年提出的平面單位距離問題，是重要子領域中的知名未解問題首次由 AI 自主解出，於社群引發大量討論。<a href="https://news.ycombinator.com/item?id=47817581" target="_blank" rel="noopener">來源</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>近期回顧</h2><span class="count">最近 20 期</span></div>
+    <div class="recap-item"><span class="recap-date">08/05</span><span class="recap-text">中國陣營（Qwen3.8-Max、Kimi K3、DeepSeek-V4-Flash）效能與定價同步發力，開源生態收斂到 MCP 這個共用工具層</span></div>
+    <details class="recap-more">
+      <summary>查看更早的回顧</summary>
+      <p class="recap-empty">目前只有這一期，還沒有更早的紀錄——累積到第 7 期之後，這裡會開始收納更早的回顧。</p>
+    </details>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>今日重點小結</h2><span class="count">摘要</span></div>
+    <ul class="digest-list">
+      <li>中國陣營（Alibaba、Moonshot、DeepSeek）在效能與定價上同步發力，模型選型不該只鎖定歐美大廠，值得列入常態比較清單。</li>
+      <li>開源與框架生態已經統一在 MCP 這個「共用工具層」上收斂，評估內部工具升級時，優先考慮支援 MCP 的方案能減少未來重複整合的成本。</li>
+      <li>供應商集中度風險持續存在——資本與企業客戶越集中在少數幾家，越建議在合約與架構上保留切換彈性，不押寶單一供應商。</li>
+      <li>學術界對 Agentic RAG 的「可靠性」與「可驗證性」投入明顯增加，代表這類系統要從「demo 好看」走到「能上線」，還需要一段時間打磨。</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>本期內容由 ITF00 於 2026-08-05 透過網路搜尋整理公開資訊產生，內容摘要僅供參考，正式決策請查證原始來源與發布日期。</p>
+    <p class="sources">
+      <a href="https://www.anthropic.com/news" target="_blank" rel="noopener">Anthropic Newsroom</a>
+      <a href="https://www.ibj.com/articles/openai-anthropic-google-to-join-white-house-ai-safety-meeting" target="_blank" rel="noopener">IBJ</a>
+      <a href="https://fortune.com/2026/07/02/sam-altman-new-world-order-ai-openai-google-anthropic/" target="_blank" rel="noopener">Fortune</a>
+      <a href="https://fortune.com/2026/08/03/alibaba-qwen3-8-max-china-next-top-ai-model/" target="_blank" rel="noopener">Fortune (Qwen3.8-Max)</a>
+      <a href="https://fortune.com/2026/07/26/china-moonshot-deepseek-zai-kimi-challenging-us-ai-cost/" target="_blank" rel="noopener">Fortune (中國模型)</a>
+      <a href="https://blog.bytebytego.com/p/top-ai-github-repositories-in-2026" target="_blank" rel="noopener">ByteByteGo</a>
+      <a href="https://ossinsight.io/trending/ai" target="_blank" rel="noopener">OSSInsight</a>
+      <a href="https://orangebot.ai/top-ai-models-this-week" target="_blank" rel="noopener">OrangeBot AI</a>
+      <a href="https://arxiv.org/list/cs.AI/recent" target="_blank" rel="noopener">arXiv cs.AI</a>
+      <a href="https://www.langchain.com/resources/ai-agent-frameworks" target="_blank" rel="noopener">LangChain 資源中心</a>
+      <a href="https://news.ycombinator.com/item?id=47817581" target="_blank" rel="noopener">Hacker News</a>
+    </p>
+  </footer>
+
+</div>
