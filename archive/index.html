@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 情報日報 — 歷史列表</title>
+<style>
+  :root {
+    --paper: #F2F1EC;
+    --paper-raised: #FBFAF7;
+    --ink: #1A1D23;
+    --ink-soft: #4B4F57;
+    --muted: #767A80;
+    --line: #DBD8CE;
+    --accent: #1E7F79;
+    --accent-ink: #0E4B47;
+    --accent-tint: #DCEEEC;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #14171C; --paper-raised: #1B1F26; --ink: #E9E7DF; --ink-soft: #C2C0B8;
+      --muted: #8B8F96; --line: #2B2F37; --accent: #4FBDB5; --accent-ink: #BEEFEA; --accent-tint: #1B3634;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14171C; --paper-raised: #1B1F26; --ink: #E9E7DF; --ink-soft: #C2C0B8;
+    --muted: #8B8F96; --line: #2B2F37; --accent: #4FBDB5; --accent-ink: #BEEFEA; --accent-tint: #1B3634;
+  }
+  :root[data-theme="light"] {
+    --paper: #F2F1EC; --paper-raised: #FBFAF7; --ink: #1A1D23; --ink-soft: #4B4F57;
+    --muted: #767A80; --line: #DBD8CE; --accent: #1E7F79; --accent-ink: #0E4B47; --accent-tint: #DCEEEC;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 780px; margin: 0 auto; padding: 48px 24px 80px; }
+  .masthead {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+    border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 28px; flex-wrap: wrap;
+  }
+  .masthead-title {
+    font-family: Georgia, "Iowan Old Style", "Noto Serif TC", serif;
+    font-size: 26px; font-weight: 700; margin: 0; text-wrap: balance;
+  }
+  .back-link { font-size: 13px; color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--accent); }
+  .year-group { margin-bottom: 32px; }
+  .year-label {
+    font-family: Georgia, "Iowan Old Style", "Noto Serif TC", serif;
+    font-size: 15px; color: var(--muted); margin: 0 0 10px;
+  }
+  .issue-list { list-style: none; margin: 0; padding: 0; }
+  .issue-list li { border-bottom: 1px solid var(--line); }
+  .issue-list a {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    padding: 12px 4px; color: var(--ink); text-decoration: none;
+  }
+  .issue-list a:hover { background: var(--paper-raised); }
+  .issue-date { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .issue-hint { color: var(--muted); font-size: 13px; }
+  .empty-note { color: var(--muted); font-size: 14px; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="masthead">
+    <h1 class="masthead-title">歷史日報列表</h1>
+    <a class="back-link" href="../index.html">← 回到最新一期</a>
+  </div>
+
+  <div class="year-group">
+    <p class="year-label">2026 年 8 月</p>
+    <ul class="issue-list">
+      <li><a href="2026-08-05.html"><span class="issue-date">2026-08-05</span><span class="issue-hint">第 1 期</span></a></li>
+    </ul>
+  </div>
+
+  <!-- 之後每天新增一筆 <li> 到對應月份的 issue-list 裡即可，格式比照上面那筆 -->
+</div>
+</body>
+</html>
